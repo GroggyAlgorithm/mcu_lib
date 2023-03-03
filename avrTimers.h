@@ -103,8 +103,6 @@ Timer_t;
 
 #ifdef TCNT0
     #define T0Load(v)                           TCNT0 = v;
-    #define Pwm0LoadDutyCycleA(dc)				OCR0A = dc
-    #define Pwm0LoadDutyCycleB(dc)				OCR0B = dc
     #define T0ClearPrescaler()					TCCR0B &= ~(1 << CS00 | 1 << CS01 | 1 << CS02)
     
 	/**
@@ -116,11 +114,21 @@ Timer_t;
 		TCCR0B |= ((prescaler.cs0 << CS00) | (prescaler.cs1 << CS01) | (prescaler.cs2 << CS02));
 	}
 
-	int8_t Timer0Init(Timer_t timer_settings);
-	void Timer0Enable();
-	void Timer0Disable();
-    void Pwm0ASetDutyCycle(uint8_t dutyCycle);
-    void Pwm0BSetDutyCycle(uint8_t dutyCycle);
+	extern int8_t Timer0Init(Timer_t timer_settings);
+	extern void Timer0Enable();
+	extern void Timer0Disable();
+	
+	#if defined(OCR0A)
+	#define Pwm0LoadDutyCycleA(dc)				OCR0A = dc
+    extern void Pwm0ASetDutyCycle(uint8_t dutyCycle);
+	#endif
+	
+	#if defined(OCR0B)
+	#define Pwm0LoadDutyCycleB(dc)				OCR0B = dc
+    extern void Pwm0BSetDutyCycle(uint8_t dutyCycle);
+	#endif
+	
+	
 #endif
 
 
@@ -128,11 +136,7 @@ Timer_t;
     #define T1Load(v)											TCNT1 = v;
     #define T1Load_HL(vL, vH)									TCNT1H = (vH & 0xFF); TCNT1L = (vL & 0xFF)
 
-    #define Pwm1A_load_reg(dc)									OCR1A = dc
-    #define Pwm1A_load_reg_HL(dcL, dcH)							OCR1AH = dcH; OCR1AL = dcL
-
-	#define Pwm1B_load_reg(dc)									OCR1B = dc
-	#define Pwm1B_load_reg_HL(dcL, dcH)							OCR1BH = dcH; OCR1BL = dcL
+    
 	
 	#define T1ClearPrescaler()									TCCR1B &= ~(1 << CS10 | 1 << CS11 | 1 << CS12)
     
@@ -145,37 +149,67 @@ Timer_t;
 		TCCR1B |= ((prescaler.cs0 << CS10) | (prescaler.cs1 << CS11) | (prescaler.cs2 << CS12));
 	}
 	
+	
+	
+	
+
+	
+	
+
+	extern int8_t Timer1Init(Timer_t timer_settings);
+	extern void Timer1Enable();
+	extern void Timer1Disable();
+	
+	#if defined(OCR1A)
+	#define Pwm1A_load_reg(dc)									OCR1A = dc
+	#define Pwm1A_load_reg_HL(dcL, dcH)							OCR1AH = dcH; OCR1AL = dcL
+	
 	static inline void Pwm1ADisable()
 	{
 		TCCR1A &= ~(1 << COM1A0 | 1 << COM1A1);
 	}
+	extern void Pwm1ASetDutyCycle(uint16_t dutyCycle);
+	#endif
 	
+	#if defined(OCR1B)
+	#define Pwm1B_load_reg(dc)									OCR1B = dc
+	#define Pwm1B_load_reg_HL(dcL, dcH)							OCR1BH = dcH; OCR1BL = dcL
 	static inline void Pwm1BDisable()
 	{
 		TCCR1A &= ~(1 << COM1B0 | 1 << COM1B1);
 	}
-
-	
-	
-
-	int8_t Timer1Init(Timer_t timer_settings);
-	void Timer1Enable();
-	void Timer1Disable();
-    void Pwm1ASetDutyCycle(uint16_t dutyCycle);
-    void Pwm1BSetDutyCycle(uint16_t dutyCycle);
+	extern void Pwm1BSetDutyCycle(uint16_t dutyCycle);
+	#endif
 
 #endif
 
 #ifdef TCNT2
-    int8_t Timer2Init(Output_compare_bits outputCompBits, Waveform_select_bits waveFormBits, Interrupt_mask_bits interrupts);
-    void Timer2Enable();
-    void Timer2Disable();
+
+
+	
+	
+	
+
+    extern int8_t Timer2Init(Output_compare_bits outputCompBits, Waveform_select_bits waveFormBits, Interrupt_mask_bits interrupts);
+    extern void Timer2Enable();
+    extern void Timer2Disable();
+	
+	#if defined(OCR2A)
+	#define Pwm2A_load_reg(dc)					OCR2A = dc
+    extern void Pwm2ASetDutyCycle(uint16_t dutyCycle);
+	#endif
+	
+	#if defined(OCR2B)
+	#define Pwm2B_load_reg(dc)					OCR2B = dc
+	extern void Pwm2BSetDutyCycle(uint16_t dutyCycle);
+	#endif
+	
 #endif
 
 #ifdef TCNT3
-    int8_t Timer3Init(Output_compare_bits outputCompBits, Waveform_select_bits waveFormBits, Interrupt_mask_bits interrupts);
-    void Timer3Enable();
-    void Timer3Disable();
+    extern int8_t Timer3Init(Output_compare_bits outputCompBits, Waveform_select_bits waveFormBits, Interrupt_mask_bits interrupts);
+    extern void Timer3Enable();
+    extern void Timer3Disable();
 #endif
 
 

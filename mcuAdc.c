@@ -17,37 +17,53 @@
  */
 uint16_t AdcGet(adc_channel_t adcChannel)
 {
+
+    //Variables
+    uint16_t adcVal = 0; //The return value from the ADC
     
-    ADC_CHANNEL_REG = adcChannel;
+    //Set the passed channel selection
+    ADC_CHANNEL_REG |= adcChannel;
     
+    //Start the ADC conversion
     ADC_start_conversion();
     
+    //Wait for adc conversion to end
     while(ADC_get_status());
+
+    //Get the result
+    adcVal = (uint16_t)ADC_get_result();
+
+    //Clear the passed channel selection
+    ADC_CHANNEL_REG &= ~(adcChannel);
     
-    return (uint16_t)ADC_get_result();
+    //Return the adc value
+    return adcVal;
     
 }
 
 
 
 /**
- * \brief Samples an ADC reading for x counts
+ * \brief Samples an ADC reading for x counts and returns the average
  * \param adcChannel The adc channel to use
  * \param sampleCount The amount of times to sample the ADC
- * \return  The adc value
+ * \return  The average adc value
  */
 uint16_t AdcSample(adc_channel_t adcChannel, uint8_t sampleCount)
 {
-    uint16_t adcResult = 0;
+    //Variables
+    uint16_t adcResult = 0; //Return value from the ADC
     
+    //If the sample count is greater than 0, avoid divide by 0 errors,...
     if(sampleCount > 0)
     {
+        //Create a variable for the loop
         uint8_t i = 0;
 
-        ADC_CHANNEL_REG = adcChannel;
+        //Select the passed channel
+        ADC_CHANNEL_REG |= adcChannel;
 
-
-
+        //While the index is less than the passed sample count...
         while(i < sampleCount)
         {
             i++;
@@ -58,6 +74,9 @@ uint16_t AdcSample(adc_channel_t adcChannel, uint8_t sampleCount)
         }
         
         adcResult /= sampleCount;
+
+        //Make sure the clear the selected channel on the way out
+        ADC_CHANNEL_REG &= ~adcChannel;
 
     }
     

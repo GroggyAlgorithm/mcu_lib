@@ -116,7 +116,7 @@ void ShortToCharArray(char valueAsCharArray[6], uint16_t numVal, uint8_t ignoreI
 * \param value The value to convert to a percentage
 * \return uint8_t percentage
 */
-uint8_t NormalizeToPercentage(uint16_t minValue, uint16_t maxValue, uint16_t value)
+uint8_t NormalizeToPercentage(int16_t minValue, int16_t maxValue, int16_t value)
 {
     //The calculated value for the value from the percentage value passed
 	uint8_t calculatedValue = 0; 
@@ -192,8 +192,8 @@ int16_t ConvertPercentageInRange(int16_t minValue, int16_t maxValue, uint16_t pe
 		//Get the beginning point of the value by taking the percentage and dividing by 100
 		float normalizedValue =  (float)((float)percentageValue/100.0f);
 		
-		//Multiply this value by the max - min value to get the calculated value.
-		calculatedValue = (int16_t)(normalizedValue * (maxValue - minValue));
+		//Multiply this value by the max - min value added to the min value to get the calculated value.
+		calculatedValue = (int16_t)(minValue + (normalizedValue * (maxValue - minValue)));
 	
 	}
     else
@@ -243,7 +243,7 @@ uint16_t ConvertPercentage(uint16_t maxValue, uint16_t percentageValue)
 /**
  * \brief Takes a 10 bit ADC value and converts it to a voltage within 5 volts. Max = 5000
  * \param adcValue The adc value done gotten
- * \return The voltage value, up to 5000 = 5 volts
+ * \return The voltage value in millivolts, up to 5000 = 5 volts
  */
 uint16_t Adc10bitTo5Volts(uint16_t adcValue)
 {

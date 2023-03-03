@@ -96,13 +96,15 @@ void Timer0Disable() {
 
 
 
+#if defined(OCR0A)
 /**
  * \brief Sets the duty cycle of OCR0A
  * 
  * 
  * \param dutyCycle The value to set for PWM
  */
-void Pwm0ASetDutyCycle(uint8_t dutyCycle) {
+void Pwm0ASetDutyCycle(uint8_t dutyCycle)
+{
 
     //Save reference to Timer control register
     uint8_t conB = TCCR0B;
@@ -115,16 +117,19 @@ void Pwm0ASetDutyCycle(uint8_t dutyCycle) {
 	//Restart an reset timer
 	TCCR0B |= conB;
 }
+#endif
 
 
 
+#if defined(OCR0B)
 /**
  * \brief Sets the duty cycle of OCR0B
  * 
  * 
  * \param dutyCycle The value to set for PWM
  */
-void Pwm0BSetDutyCycle(uint8_t dutyCycle) {
+void Pwm0BSetDutyCycle(uint8_t dutyCycle)
+{
 
     //Save reference to Timer control register
 	uint8_t conB = TCCR0B;
@@ -137,6 +142,10 @@ void Pwm0BSetDutyCycle(uint8_t dutyCycle) {
 	//Restart and reset timer
 	TCCR0B |= conB;
 }
+#endif
+
+
+
 
 #endif
 
@@ -195,7 +204,8 @@ int8_t Timer1Init(Timer_t timer_settings)
 /**
  * \brief Enables Timer/Counter 1 on the power reduction register 
  */
-void Timer1Enable() {
+void Timer1Enable() 
+{
 
     /* Enable TC1 From Power Reduction Register */
     #ifdef PRR0
@@ -212,7 +222,8 @@ void Timer1Enable() {
 /**
  * \brief Disables Timer/Counter 1 on the power reduction register 
  */
-void Timer1Disable() {
+void Timer1Disable() 
+{
     /* Disable TC1 From Power Reduction Register */
 
     #ifdef PRR0
@@ -225,13 +236,15 @@ void Timer1Disable() {
 }
 
 
+
+#if defined(OCR1A)
 /**
  * \brief Sets the duty cycle of OCR1A
  * 
  * 
  * \param dutyCycle The value to set for PWM
  */
-void Pwm1ASetDutyCycle(uint16_t dutyCycle) 
+void Pwm1ASetDutyCycle(uint16_t dutyCycle)
 {
 
     //Save reference to Timer control register
@@ -246,16 +259,19 @@ void Pwm1ASetDutyCycle(uint16_t dutyCycle)
 	//Restart an reset timer
 	TCCR1B |= conB;
 }
+#endif
 
 
 
+#if defined(OCR1B)
 /**
  * \brief Sets the duty cycle of OCR1B
  * 
  * 
  * \param dutyCycle The value to set for PWM
  */
-void Pwm1BSetDutyCycle(uint16_t dutyCycle) {
+void Pwm1BSetDutyCycle(uint16_t dutyCycle)
+{
 
     //Save reference to Timer control register
 	uint8_t conB = TCCR1B;
@@ -269,7 +285,7 @@ void Pwm1BSetDutyCycle(uint16_t dutyCycle) {
 	//Restart and reset timer
 	TCCR1B |= conB;
 }
-
+#endif
 
 
 
@@ -316,7 +332,8 @@ int8_t Timer2Init(Output_compare_bits outputCompBits, Waveform_select_bits waveF
 /**
  * \brief Enables Timer/Counter 2 on the power reduction register 
  */
-void Timer2Enable() {
+void Timer2Enable()
+{
     /* Enable TC2 From Power Reduction Register */
 	PRR0 &= ~(1 << PRTIM2);
 }
@@ -324,10 +341,63 @@ void Timer2Enable() {
 /**
  * \brief Disables Timer/Counter 2 on the power reduction register 
  */
-void Timer2Disable() {
+void Timer2Disable()
+{
     /* Disable TC2 From Power Reduction Register */
 	PRR0 |= (1 << PRTIM2);
 }
+
+
+
+#if defined(OCR2A)
+/**
+ * \brief Sets the duty cycle of OCR2A
+ * 
+ * 
+ * \param dutyCycle The value to set for PWM
+ */
+void Pwm2ASetDutyCycle(uint16_t dutyCycle)
+{
+
+    //Save reference to Timer control register
+    uint8_t conB = TCCR2B;
+
+	//Clear prescaler register and stop timer
+	TCCR2B = 0;
+
+	//Set the duty cycle
+	Pwm2A_load_reg(dutyCycle);
+
+	//Restart an reset timer
+	TCCR2B |= conB;
+}
+#endif
+
+
+
+#if defined(OCR2B)
+/**
+ * \brief Sets the duty cycle of OCR2B
+ * 
+ * 
+ * \param dutyCycle The value to set for PWM
+ */
+void Pwm2BSetDutyCycle(uint16_t dutyCycle)
+{
+
+    //Save reference to Timer control register
+	uint8_t conB = TCCR2B;
+
+	//Clear prescaler register and stop timer
+	TCCR2B = 0;
+
+	//Set the duty cycle
+	Pwm2B_load_reg(dutyCycle);
+
+	//Restart and reset timer
+	TCCR2B |= conB;
+}
+#endif
 
 
 #endif

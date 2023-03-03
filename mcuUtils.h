@@ -345,6 +345,17 @@ extern "C" {
 ///Squares the value passed
 #define sqr(val)	(val*val)
 
+///Converts celsius to fahrenheit and returns a float
+#define celsiusToFahrenheit(_celsVal)		(((float)_celsVal) * 1.8f + 32)
+
+///Converts fahrenheit to celsius and returns a float
+#define fahrenheitToCelsius(_fahrenheitVal)	(((float)(_fahrenheitVal) - 32) * 0.5555555555556f)
+
+///Converts kelvin to celsius and returns a float
+#define kelvinToCelsius(_kelvinVal)			(((float)(_kelvinVal) - 273.15f))
+
+///Converts celsius to kelvin and returns a float
+#define celsiusToKelvin(_celsVal)			(((float)_celsVal) + 273.15f)
 
 #if defined(MCU_UTILS_USE_INLINE) && MCU_UTILS_USE_INLINE == 1
 
@@ -556,6 +567,9 @@ inline char crolL(char byte)
 
 
 
+
+
+
 ///Calculates the average voltage from duty cycle
 #define averageVoltageFromDutyCycle(highOutputVoltage, lowOutputVoltage, dutyHigh, dutyLow) (((highOutputVoltage*dutyHigh)+(lowOutputVoltage*dutyLow))/(dutyHigh+dutyLow))
 
@@ -695,6 +709,9 @@ _61,_62,_63,N,...) N
 ///Pragma helper
 #define __DO_PRAGMA(x)		_Pragma (#x)
 
+///Pragma helper for setting a message
+#define CONSOLE_MSG(x)		__DO_PRAGMA(message ("" #x " file: " __FILE__));
+
 ///Pragma helper for todo as a message
 #define TODO(x)				__DO_PRAGMA(message ("TODO: " #x "\t.....in file: " __FILE__));
 
@@ -788,7 +805,7 @@ typedef union _NIBBLE_SPLIT_UNION_
 
 extern uint32_t CalculateFrequencyTop(uint64_t cpuSpeed, uint16_t prescaler, uint16_t hertz);
 extern void ShortToCharArray(char valueAsCharArray[6], uint16_t numVal, uint8_t ignoreInitialEmpties);
-extern uint8_t NormalizeToPercentage(uint16_t minValue, uint16_t maxValue, uint16_t value);
+extern uint8_t NormalizeToPercentage(int16_t minValue, int16_t maxValue, int16_t value);
 extern int16_t ConvertPercentageInRange(int16_t minValue, int16_t maxValue, uint16_t percentageValue);
 extern uint16_t ConvertPercentage(uint16_t maxValue, uint16_t percentageValue);
 extern uint16_t Adc10bitTo5Volts(uint16_t adcValue);
